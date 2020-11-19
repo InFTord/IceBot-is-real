@@ -6,7 +6,7 @@ client = commands.Bot(command_prefix=">", case_insensitive=True, intents = disco
 
 @client.event
 async def on_ready():
-    print(f'{client.user.name} зашел!')
+    print(f'{client.user.name} в сети!')
     await client.change_presence(activity=discord.Game(name='>help'))
 
 
