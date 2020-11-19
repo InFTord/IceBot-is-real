@@ -1,8 +1,13 @@
+# Стандартные импорты, даже говорить ничего о не хочу.
+
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import CommandNotFound
 
+
 client = commands.Bot(command_prefix=">", case_insensitive=True, intents = discord.Intents(messages=True,members=True,guilds=True))
+
+# Ивенты
 
 @client.event
 async def on_ready():
@@ -17,6 +22,8 @@ async def on_command_error(ctx, error):
         print(error)
     if isinstance(error, CommandNotFound):
         await ctx.message.add_reaction('❌')
+
+# Команды
 
 @client.command(name='пинг', aliases=['ping'])
 async def ping(ctx):
@@ -36,5 +43,6 @@ async def kick(ctx, member: discord.Member, *, reason="Причины не да�
     await ctx.message.add_reaction('✅')
     await member.send(f'Вы были кикнуты с {ctx.guild} по причине {reason}')
 
+# Логин бота
 
 client.run('NzA0NTk3NzM1MjYwODE1Mzgw.Xqfdxg.UlB7_nJzdGOiL7XtY14H3EnaIcc')
