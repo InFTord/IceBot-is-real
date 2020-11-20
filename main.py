@@ -3,9 +3,10 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import CommandNotFound
+from config import bot_token, prefix
 
 
-client = commands.Bot(command_prefix=">", case_insensitive=True, intents = discord.Intents(messages=True,members=True,guilds=True))
+client = commands.Bot(command_prefix=prefix, case_insensitive=True, intents = discord.Intents(messages=True,members=True,guilds=True))
 
 # Ивенты
 
@@ -45,4 +46,4 @@ async def kick(ctx, member: discord.Member, *, reason="Причины не да�
 
 # Логин бота
 
-client.run('NzA0NTk3NzM1MjYwODE1Mzgw.Xqfdxg.UlB7_nJzdGOiL7XtY14H3EnaIcc')
+client.run(bot_token)
