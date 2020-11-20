@@ -31,6 +31,10 @@ async def on_command_error(ctx, error):
 		await ctx.message.add_reaction('❌')
 
 
+@client.event
+async def on_command_completion(ctx):
+	print(f'Была выполнена команда {ctx.command} юзером {ctx.author} на сервере {ctx.guild}')
+
 # Команды
 
 @client.command(name='пинг', aliases=['ping'])
