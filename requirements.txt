@@ -47,9 +47,6 @@ pymongo==3.11.0
 pymunk==5.7.0
 python-dateutil==2.8.1
 python-dotenv==0.14.0
-pytz==2020.1
-pywin32==228
-pywin32-ctypes==0.2.0
 requests==2.24.0
 rfc3986==1.4.0
 six==1.15.0
