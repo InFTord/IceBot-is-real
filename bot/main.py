@@ -7,6 +7,7 @@ from typing import Optional
 from discord.ext.commands.errors import CommandNotFound
 from discord.member import Member
 bot_token = os.getenv("bot_token")
+prefix = os.getenv("prefix")
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True,
                       intents=discord.Intents(messages=True, members=True, guilds=True))
@@ -78,4 +79,4 @@ async def user(ctx, member: Optional[Member]):
 
 # Логин бота
 
-client.run(config.bot_token)
+client.run(bot_token)
