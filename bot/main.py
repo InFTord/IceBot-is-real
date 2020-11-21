@@ -76,7 +76,7 @@ async def ping(ctx):
 	await ctx.send('Понг!')
 
 
-@client.command(name='очистка', aliases=['clear', 'c', 'очистить'], usage='[Количество]')
+@client.command(name='очистка', aliases=['clear', 'очистить'], usage='[Количество]')
 @commands.has_guild_permissions(manage_messages=True)
 async def clear(ctx, amount=2):
 	await ctx.channel.purge(limit=amount)
