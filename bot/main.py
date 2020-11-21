@@ -1,16 +1,26 @@
 # Стандартные импорты, даже говорить ничего о не хочу.
 
 import discord
+import asyncio
 import os
 from discord.ext import commands
 from typing import Optional
 from discord.ext.commands.errors import CommandNotFound
 from discord.member import Member
+
 bot_token = os.getenv("bot_token")
 prefix = os.getenv("prefix")
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True,
                       intents=discord.Intents(messages=True, members=True, guilds=True))
+
+
+async def status_task():
+	while True:
+		await client.change_presence(activity=discord.Game(name='i!help'), type=0)
+		asyncio.sleep(60)
+		await client.change_presence(
+			activity=discord.Game(name='Замораживаю {} людей').format((len(set(client.get_all_channels())))), type=3)
 
 
 # Ивенты
@@ -19,6 +29,7 @@ client = commands.Bot(command_prefix=prefix, case_insensitive=True,
 async def on_ready():
 	print(f"{client.user.name} в сети")
 	await client.change_presence(activity=discord.Game(name='i!help'))
+	client.loop.create_task(status_task())
 
 
 @client.event
@@ -34,6 +45,7 @@ async def on_command_error(ctx, error):
 	if isinstance(error, commands.MissingPermissions):
 		member = ctx.author
 		await member.send("У вас недостаточно прав!")
+
 
 @client.event
 async def on_command_completion(ctx):
