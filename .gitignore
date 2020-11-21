@@ -126,3 +126,4 @@ dmypy.json
 config.py
 *.xml
 .idea/IceBot-is-real.iml
+bot/Settings.py

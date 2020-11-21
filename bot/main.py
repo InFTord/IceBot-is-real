@@ -6,7 +6,7 @@ from discord.ext import commands
 from typing import Optional
 from discord.ext.commands.errors import CommandNotFound
 from discord.member import Member
-bot_token = os.getenv()
+bot_token = os.getenv("bot_token")
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True,
                       intents=discord.Intents(messages=True, members=True, guilds=True))
