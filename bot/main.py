@@ -17,10 +17,11 @@ client = commands.Bot(command_prefix=prefix, case_insensitive=True,
 
 async def status_task():
 	while True:
-		await client.change_presence(activity=discord.Game(name='i!help'), type=0)
-		asyncio.sleep(60)
+		await client.change_presence(activity=discord.Game(name='i!help'))
+		await asyncio.sleep(60)
 		await client.change_presence(
-			activity=discord.Game(name='Замораживаю {} людей').format((len(set(client.get_all_channels())))), type=3)
+			activity=discord.Game(name='Замораживаю {} людей').format((len(set(client.get_all_channels())))))
+		await asyncio.sleep(60)
 
 
 # Ивенты
