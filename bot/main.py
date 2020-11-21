@@ -14,7 +14,7 @@ prefix = os.getenv("prefix")
 
 client = commands.Bot(command_prefix=prefix, case_insensitive=True,
                       intents=discord.Intents(messages=True, members=True, guilds=True))
-
+client.remove_command('help')
 
 async def status_task():
 	while True:
@@ -30,7 +30,8 @@ async def status_task():
 @client.event
 async def on_ready():
 	print(
-		f"{client.user.name}#{client.user.discriminator} в сети\nИД бота: {client.user.id}\nВерсия бота: {discord.__version__}\nКоличество серверов:", len(client.guilds), "\nКоличество участников:", len(set(client.get_all_members()))),
+		f"{client.user.name}#{client.user.discriminator} в сети\nИД бота: {client.user.id}\nВерсия бота: {discord.__version__}\nКоличество серверов:",
+		len(client.guilds), "\nКоличество участников:", len(set(client.get_all_members()))),
 	client.loop.create_task(status_task())
 
 
@@ -46,7 +47,8 @@ async def on_command_error(ctx, error):
 	if isinstance(error, commands.CommandInvokeError):
 		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
 		embed.set_author(name='Команда не работает | Ошибка')
-		embed.add_field(name='Данная команда в данный момент не работает!', value='Сообщите разработчику бота о данной ошибке!')
+		embed.add_field(name='Данная команда в данный момент не работает!',
+		                value='Сообщите разработчику бота о данной ошибке!')
 		embed.set_footer(text='Пока что юзайте другие команды бота :3')
 		await ctx.send(embed=embed)
 		print(error)
@@ -54,9 +56,11 @@ async def on_command_error(ctx, error):
 		await ctx.message.add_reaction('❌')
 	if isinstance(error, commands.MissingPermissions):
 		member = ctx.author
+		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
 		embed.set_author(name='Недостаточно прав | Ошибка')
-		embed.add_field(name='У вас недостаточно прав для использования этой команды!', value='Вы думаете я допущу взлом сервера? А вот и нет.')
-		embed.set_footer(name='Получите необходимые права для бота :3')
+		embed.add_field(name='У вас недостаточно прав для использования этой команды!',
+		                value='Вы думаете я допущу взлом сервера? А вот и нет.')
+		embed.set_footer(text='Получите необходимые права для бота :3')
 		await member.send(embed=embed)
 
 
@@ -76,7 +80,6 @@ async def ping(ctx):
 @commands.has_guild_permissions(manage_messages=True)
 async def clear(ctx, amount=2):
 	await ctx.channel.purge(limit=amount)
-	await ctx.send('✅')
 
 
 @client.command(name='кик', aliases=['kick', 'выгнать', 'k'], usage='[участник] {причина}')
@@ -102,6 +105,17 @@ async def user(ctx, member: Optional[Member]):
 	embed.set_footer(text=f'Запрос профиля был совершен: {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 	await ctx.send(embed=embed)
 
+
+@client.command(name='хелп', aliases=['помощь', 'commands', 'команды', 'c',])
+async def help(ctx):
+	embed = discord.Embed(color=discord.Color.green(), timestamp=ctx.message.created_at)
+	embed.set_author(name='Помощь по командам')
+	embed.add_field(name='i!профиль', value='Можно просмотреть чей то профиль')
+	embed.add_field(name='i!кик', value='Кто то нарушает правила? Дайте ему кик, что бы перестал!')
+	embed.add_field(name='i!очистить', value='Допустим, кто то нафлудил... Данная команда поможет убрать данный флуд за секунды!')
+	embed.add_field(name='i!пинг', value='Просто пинг.')
+	embed.set_footer(text='Данный хелп еще в разработке, так что а)')
+	await ctx.send(embed=embed)
 
 # Логин бота
 
