@@ -90,7 +90,7 @@ async def kick(ctx, member: discord.Member, *, reason="причины не да�
 	embed = discord.Embed(title='Вы были кикнуты!', color=discord.Color.red(), timestamp=ctx.message.created_at)
 	embed.add_field(name='Причина:', value=f'```{reason}```', inline=False)
 	embed.add_field(name='Кто кикнул:', value=ctx.message.author.mention, inline=False)
-	embed.set_footer(text=f'ИД сообщения: {ctx.message.id}')
+	embed.set_footer(text=f'ИД сообщения: {ctx.message.id}', icon_url=ctx.author.avatar_url)
 	await member.send(embed=embed)
 
 
@@ -109,12 +109,12 @@ async def user(ctx, member: Optional[Member]):
 @client.command(name='хелп', aliases=['помощь', 'commands', 'команды', 'c',])
 async def help(ctx):
 	embed = discord.Embed(color=discord.Color.green(), timestamp=ctx.message.created_at)
-	embed.set_author(name='Помощь по командам')
+	embed.set_author(name='Информация | Помощь по командам')
 	embed.add_field(name='i!профиль', value='Можно просмотреть чей то профиль')
 	embed.add_field(name='i!кик', value='Кто то нарушает правила? Дайте ему кик, что бы перестал!')
-	embed.add_field(name='i!очистить', value='Допустим, кто то нафлудил... Данная команда поможет убрать данный флуд за секунды!')
+	embed.add_field(name='i!очистить', value='Допустим, кто то нафлудил... Данная команда поможет убрать данный флуд за секунды!', inline=False)
 	embed.add_field(name='i!пинг', value='Просто пинг.')
-	embed.set_footer(text='Данный хелп еще в разработке, так что а)')
+	embed.set_footer(text='Данный хелп еще в разработке, так что а)', icon_url=ctx.author.avatar_url)
 	await ctx.send(embed=embed)
 
 # Логин бота
