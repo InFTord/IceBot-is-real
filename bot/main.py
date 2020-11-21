@@ -30,9 +30,7 @@ async def status_task():
 @client.event
 async def on_ready():
 	print(
-		'{}#{} в сети\nИД бота: {}\nКоличество юзеров: {}\nВерсия бота: {}'.format(client.user.name),
-		client.user.discriminator, client.user.id, (len(set(client.get_all_members()))), discord.__version__)
-	await client.change_presence(activity=discord.Game(name='i!help'))
+		f"{client.user.name}#{client.user.discriminator} в сети\nИД бота: {client.user.id}\nВерсия бота: {discord.__version__}\nКоличество серверов: {client.guilds}\nКоличество участников:", len(set(client.get_all_members()))),
 	client.loop.create_task(status_task())
 
 
