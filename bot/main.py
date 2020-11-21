@@ -30,23 +30,34 @@ async def status_task():
 @client.event
 async def on_ready():
 	print(
-		f"{client.user.name}#{client.user.discriminator} в сети\nИД бота: {client.user.id}\nВерсия бота: {discord.__version__}\nКоличество серверов: {client.guilds}\nКоличество участников:", len(set(client.get_all_members()))),
+		f"{client.user.name}#{client.user.discriminator} в сети\nИД бота: {client.user.id}\nВерсия бота: {discord.__version__}\nКоличество серверов:", len(client.guilds), "\nКоличество участников:", len(set(client.get_all_members()))),
 	client.loop.create_task(status_task())
 
 
 @client.event
 async def on_command_error(ctx, error):
 	if isinstance(error, commands.UserInputError):
-		await ctx.send(f'Используйте следующие аргументы для данной команды: {ctx.command.usage}')
+		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
+		embed.set_author(name='Неправильные аргументы | Ошибка')
+		embed.add_field(name='Используйте следующие аргументы для данной команды:', value=f'```{ctx.command.usage}```')
+		embed.set_footer(text='Я думаю вам надо читать хелп')
+		await ctx.send(embed=embed)
 
 	if isinstance(error, commands.CommandInvokeError):
-		await ctx.send('Данная команда в данный момент не работает, пожалуйста попробуйте позже!')
+		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
+		embed.set_author(name='Команда не работает | Ошибка')
+		embed.add_field(name='Данная команда в данный момент не работает!', value='Сообщите разработчику бота о данной ошибке!')
+		embed.set_footer(text='Пока что юзайте другие команды бота :3')
+		await ctx.send(embed=embed)
 		print(error)
 	if isinstance(error, CommandNotFound):
 		await ctx.message.add_reaction('❌')
 	if isinstance(error, commands.MissingPermissions):
 		member = ctx.author
-		await member.send("У вас недостаточно прав!")
+		embed.set_author(name='Недостаточно прав | Ошибка')
+		embed.add_field(name='У вас недостаточно прав для использования этой команды!', value='Вы думаете я допущу взлом сервера? А вот и нет.')
+		embed.set_footer(name='Получите необходимые права для бота :3')
+		await member.send(embed=embed)
 
 
 @client.event
@@ -58,7 +69,7 @@ async def on_command_completion(ctx):
 
 @client.command(name='пинг', aliases=['ping'])
 async def ping(ctx):
-	await ctx.send(f'Понг!')
+	await ctx.send('Понг!')
 
 
 @client.command(name='очистка', aliases=['clear', 'c', 'очистить'], usage='[Количество]')
