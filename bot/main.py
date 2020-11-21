@@ -1,10 +1,11 @@
 # Стандартные импорты, даже говорить ничего о не хочу.
 
-import discord
 import asyncio
 import os
-from discord.ext import commands
 from typing import Optional
+
+import discord
+from discord.ext import commands
 from discord.ext.commands.errors import CommandNotFound
 from discord.member import Member
 
@@ -20,7 +21,7 @@ async def status_task():
 		await client.change_presence(activity=discord.Game(name='i!help'))
 		await asyncio.sleep(10)
 		await client.change_presence(
-			activity=discord.Game(name='Замораживаю {} людей'.format((len(set(client.get_all_channels()))))))
+			activity=discord.Game(name='Замораживаю {} людей'.format((len(set(client.get_all_members()))))))
 		await asyncio.sleep(10)
 
 
@@ -29,7 +30,8 @@ async def status_task():
 @client.event
 async def on_ready():
 	print(
-		f"{client.user.name}#{client.user.discriminator} в сети\nИД бота: {client.user.id}\nКоличество юзеров: {client.get_all_members()}\nВерсия бота: {discord.__version__}")
+		'{}#{} в сети\nИД бота: {}\nКоличество юзеров: {}\nВерсия бота: {}'.format(client.user.name),
+		client.user.discriminator, client.user.id, (len(set(client.get_all_members()))), discord.__version__)
 	await client.change_presence(activity=discord.Game(name='i!help'))
 	client.loop.create_task(status_task())
 
@@ -58,7 +60,7 @@ async def on_command_completion(ctx):
 
 @client.command(name='пинг', aliases=['ping'])
 async def ping(ctx):
-	await ctx.send('Понг!')
+	await ctx.send(f'Понг!')
 
 
 @client.command(name='очистка', aliases=['clear', 'c', 'очистить'], usage='[Количество]')
