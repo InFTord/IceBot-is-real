@@ -1,14 +1,14 @@
 # Стандартные импорты, даже говорить ничего о не хочу.
 
 import discord
+import os
 from discord.ext import commands
 from typing import Optional
 from discord.ext.commands.errors import CommandNotFound
 from discord.member import Member
-from bot import config
+bot_token = os.getenv()
 
-
-client = commands.Bot(command_prefix=config.prefix, case_insensitive=True,
+client = commands.Bot(command_prefix=prefix, case_insensitive=True,
                       intents=discord.Intents(messages=True, members=True, guilds=True))
 
 
