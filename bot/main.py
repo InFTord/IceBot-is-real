@@ -9,12 +9,18 @@ from discord.ext import commands
 from discord.ext.commands.errors import CommandNotFound
 from discord.member import Member
 
+# Получение переменных в Хероку
+
 bot_token = os.getenv("bot_token")
 prefix = os.getenv("prefix")
 
+#  Переменная клиент, без неё нихуя не работает дада
+
 client = commands.Bot(command_prefix=prefix, case_insensitive=True,
                       intents=discord.Intents(messages=True, members=True, guilds=True))
+# Удаление стандартного хелпа из бота
 client.remove_command('help')
+
 
 async def status_task():
 	while True:
@@ -35,13 +41,15 @@ async def on_ready():
 	client.loop.create_task(status_task())
 
 
+# Хандлер ошибок
+
 @client.event
 async def on_command_error(ctx, error):
 	if isinstance(error, commands.UserInputError):
 		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
 		embed.set_author(name='Неправильные аргументы | Ошибка')
 		embed.add_field(name='Используйте следующие аргументы для данной команды:', value=f'```{ctx.command.usage}```')
-		embed.set_footer(text='Я думаю вам надо читать хелп')
+		embed.set_footer(text='Я думаю вам надо читать хелп', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 
 	if isinstance(error, commands.CommandInvokeError):
@@ -49,7 +57,7 @@ async def on_command_error(ctx, error):
 		embed.set_author(name='Команда не работает | Ошибка')
 		embed.add_field(name='Данная команда в данный момент не работает!',
 		                value='Сообщите разработчику бота о данной ошибке!')
-		embed.set_footer(text='Пока что юзайте другие команды бота :3')
+		embed.set_footer(text='Пока что юзайте другие команды бота :3', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 		print(error)
 	if isinstance(error, CommandNotFound):
@@ -60,7 +68,7 @@ async def on_command_error(ctx, error):
 		embed.set_author(name='Недостаточно прав | Ошибка')
 		embed.add_field(name='У вас недостаточно прав для использования этой команды!',
 		                value='Вы думаете я допущу взлом сервера? А вот и нет.')
-		embed.set_footer(text='Получите необходимые права для бота :3')
+		embed.set_footer(text='Получите необходимые права для бота :3', icon_url=ctx.author.avatar_url)
 		await member.send(embed=embed)
 
 
@@ -106,16 +114,21 @@ async def user(ctx, member: Optional[Member]):
 	await ctx.send(embed=embed)
 
 
-@client.command(name='хелп', aliases=['помощь', 'commands', 'команды', 'c',])
+# Напоминание - доработать хелп
+
+@client.command(name='хелп', aliases=['помощь', 'commands', 'команды', 'c', 'help'])
 async def help(ctx):
 	embed = discord.Embed(color=discord.Color.green(), timestamp=ctx.message.created_at)
 	embed.set_author(name='Информация | Помощь по командам')
 	embed.add_field(name='i!профиль', value='Можно просмотреть чей то профиль')
 	embed.add_field(name='i!кик', value='Кто то нарушает правила? Дайте ему кик, что бы перестал!')
-	embed.add_field(name='i!очистить', value='Допустим, кто то нафлудил... Данная команда поможет убрать данный флуд за секунды!', inline=False)
-	embed.add_field(name='i!пинг', value='Просто пинг.')
+	embed.add_field(name='i!очистить',
+	                value='Допустим, кто то нафлудил... Данная команда поможет убрать данный флуд за секунды!',
+	                inline=False)
+	embed.add_field(name='i!пинг', value='Просто пинг.', inline=True)
 	embed.set_footer(text='Данный хелп еще в разработке, так что а)', icon_url=ctx.author.avatar_url)
 	await ctx.send(embed=embed)
+
 
 # Логин бота
 
