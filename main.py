@@ -15,7 +15,7 @@ client = commands.Bot(command_prefix=prefix, case_insensitive=True,
 
 @client.event
 async def on_ready():
-	print(f'{client.user.name} в сети')
+	print(f"{client.user.name} в сети")
 	await client.change_presence(activity=discord.Game(name='i!help'))
 
 
@@ -29,11 +29,14 @@ async def on_command_error(ctx, error):
 		print(error)
 	if isinstance(error, CommandNotFound):
 		await ctx.message.add_reaction('❌')
-
+	if isinstance(error, commands.MissingPermissions):
+		member = ctx.author
+		await member.send("У вас недостаточно прав!")
 
 @client.event
 async def on_command_completion(ctx):
 	print(f'Была выполнена команда {ctx.command} юзером {ctx.author} на сервере {ctx.guild}')
+
 
 # Команды
 
@@ -56,7 +59,7 @@ async def kick(ctx, member: discord.Member, *, reason="причины не да�
 	await ctx.message.add_reaction('✅')
 	embed = discord.Embed(title='Вы были кикнуты!', color=discord.Color.red(), timestamp=ctx.message.created_at)
 	embed.add_field(name='Причина:', value=f'```{reason}```', inline=False)
-	embed.add_field(name='Кто кикнул:', value=ctx.message.author, inline=False)
+	embed.add_field(name='Кто кикнул:', value=ctx.message.author.mention, inline=False)
 	embed.set_footer(text=f'ИД сообщения: {ctx.message.id}')
 	await member.send(embed=embed)
 
@@ -64,7 +67,11 @@ async def kick(ctx, member: discord.Member, *, reason="причины не да�
 @client.command(name='юзеринфо', aliases=['user', 'userinfo', 'профиль', 'u', 'profile'], usage='{пользователь}')
 async def user(ctx, member: Optional[Member]):
 	member = member or ctx.author
-	embed = discord.Embed(description=f'Имя юзера: {member.display_name}\nИД: {member.id}\n', color=member.color)
+	embed = discord.Embed(color=member.color, timestamp=member.created_at)
+	embed.add_field(name='Имя юзера', value=f'{member.display_name}({member.mention})', inline=False)
+	embed.add_field(name='ID юзера', value=member.id, inline=False)
+	embed.set_thumbnail(url=member.avatar_url)
+	embed.set_footer(text=f'Запрос профиля был совершен: {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
 	await ctx.send(embed=embed)
 
 
