@@ -18,17 +18,18 @@ client = commands.Bot(command_prefix=prefix, case_insensitive=True,
 async def status_task():
 	while True:
 		await client.change_presence(activity=discord.Game(name='i!help'))
-		await asyncio.sleep(60)
+		await asyncio.sleep(10)
 		await client.change_presence(
-			activity=discord.Game(name='Замораживаю {} людей').format((len(set(client.get_all_channels())))))
-		await asyncio.sleep(60)
+			activity=discord.Game(name='Замораживаю {} людей'.format((len(set(client.get_all_channels()))))))
+		await asyncio.sleep(10)
 
 
 # Ивенты
 
 @client.event
 async def on_ready():
-	print(f"{client.user.name} в сети")
+	print(
+		f"{client.user.name}#{client.user.discriminator} в сети\nИД бота: {client.user.id}\nКоличество юзеров: {client.get_all_members()}\nВерсия бота: {discord.__version__}")
 	await client.change_presence(activity=discord.Game(name='i!help'))
 	client.loop.create_task(status_task())
 
@@ -83,6 +84,7 @@ async def kick(ctx, member: discord.Member, *, reason="причины не да�
 async def user(ctx, member: Optional[Member]):
 	member = member or ctx.author
 	embed = discord.Embed(color=member.color, timestamp=member.created_at)
+	embed.set_author(name='Информация | Юзеринфо')
 	embed.add_field(name='Имя юзера', value=f'{member.display_name}({member.mention})', inline=False)
 	embed.add_field(name='ID юзера', value=member.id, inline=False)
 	embed.set_thumbnail(url=member.avatar_url)
