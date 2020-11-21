@@ -38,7 +38,6 @@ pipreqs==0.4.10
 praw==7.1.0
 prawcore==1.4.0
 psutil==5.7.2
-py3minepi @ file:///C:/Users/%D0%90%D1%80%D1%81%D0%B5%D0%BD%D0%B8%D0%B9/Desktop/Minecraft%20Tools/minecraftPythonAPI.zip
 pycparser==2.20
 pygame==2.0.0
 PyInstaller==3.6
