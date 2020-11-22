@@ -27,7 +27,7 @@ async def status_task():
 		await client.change_presence(activity=discord.Game(name='i!help'))
 		await asyncio.sleep(10)
 		await client.change_presence(
-			activity=discord.Game(name='Замораживаю {} людей'.format((len(set(client.get_all_members()))))))
+			activity=discord.Game(name='заморозку {} людей'.format((len(set(client.get_all_members()))))))
 		await asyncio.sleep(10)
 
 
@@ -51,7 +51,7 @@ async def on_command_error(ctx, error):
 		embed.add_field(name='Используйте следующие аргументы для данной команды:', value=f'```{ctx.command.usage}```')
 		embed.set_footer(text='Я думаю вам надо читать хелп', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
-
+	
 	if isinstance(error, commands.CommandInvokeError):
 		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
 		embed.set_author(name='Команда не работает | Ошибка')
@@ -59,7 +59,7 @@ async def on_command_error(ctx, error):
 		                value='Сообщите разработчику бота о данной ошибке!')
 		embed.set_footer(text='Пока что юзайте другие команды бота :3', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
-		print(error)
+	
 	if isinstance(error, CommandNotFound):
 		await ctx.message.add_reaction('❌')
 	if isinstance(error, commands.MissingPermissions):
@@ -68,8 +68,15 @@ async def on_command_error(ctx, error):
 		embed.set_author(name='Недостаточно прав | Ошибка')
 		embed.add_field(name='У вас недостаточно прав для использования этой команды!',
 		                value='Вы думаете я допущу взлом сервера? А вот и нет.')
-		embed.set_footer(text='Получите необходимые права для бота :3', icon_url=ctx.author.avatar_url)
+		embed.set_footer(text='Получите необходимые права для данной команды :3', icon_url=ctx.author.avatar_url)
 		await member.send(embed=embed)
+	
+	if isinstance(error, commands.BotMissingPermissions):
+		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
+		embed.set_author(name='Недостаточно прав бота | Ошибка')
+		embed.add_field(name='У бота недостаточно прав для выполнения данной команды!',
+		                value='Выдайте необходимые права для бота')
+		embed.set_footer(text='Как мне работать без необходимых прав? :(', icon_url=ctx.author.avatar_url)
 
 
 @client.event
@@ -104,14 +111,29 @@ async def kick(ctx, member: discord.Member, *, reason="причины не да�
 
 @client.command(name='юзеринфо', aliases=['user', 'userinfo', 'профиль', 'u', 'profile'], usage='{пользователь}')
 async def user(ctx, member: Optional[Member]):
-	member = member or ctx.author
-	embed = discord.Embed(color=member.color, timestamp=member.created_at)
-	embed.set_author(name='Информация | Юзеринфо')
-	embed.add_field(name='Имя юзера', value=f'{member.display_name}({member.mention})', inline=False)
-	embed.add_field(name='ID юзера', value=member.id, inline=False)
-	embed.set_thumbnail(url=member.avatar_url)
-	embed.set_footer(text=f'Запрос профиля был совершен: {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
-	await ctx.send(embed=embed)
+	if not ctx.guild:
+		member = member or ctx.author
+		embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
+		embed.set_author(name='Информация | Юзеринфо')
+		embed.add_field(name='Имя юзера', value=f'{member.display_name}({member.mention})', inline=False)
+		embed.add_field(name='Дата создания аккаунта юзера:', value=member.created_at.strftime("%d/%m/%Y %H:%M:%S"),
+		                inline=False)
+		embed.set_thumbnail(url=member.avatar_url)
+		embed.set_footer(text=f'Запрос профиля был совершен: {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+		await ctx.send(embed=embed)
+	
+	else:
+		member = member or ctx.author
+		embed = discord.Embed(color=member.color, timestamp=ctx.message.created_at)
+		embed.set_author(name='Информация | Юзеринфо')
+		embed.add_field(name='Имя юзера', value=f'{member.display_name}({member.mention})', inline=False)
+		embed.add_field(name='Дата создания аккаунта юзера:', value=member.created_at.strftime("%d/%m/%Y %H:%M:%S"),
+		                inline=False)
+		embed.add_field(name='Дата захода юзера на сервер:', value=member.joined_at.strftime("%d/%m/%Y %H:%M:%S"),
+		                inline=False)
+		embed.set_thumbnail(url=member.avatar_url)
+		embed.set_footer(text=f'Запрос профиля был совершен: {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+		await ctx.send(embed=embed)
 
 
 # Напоминание - доработать хелп
@@ -123,7 +145,7 @@ async def help(ctx):
 	embed.add_field(name='i!профиль', value='Можно просмотреть чей то профиль')
 	embed.add_field(name='i!кик', value='Кто то нарушает правила? Дайте ему кик, что бы перестал!')
 	embed.add_field(name='i!очистить',
-	                value='Допустим, кто то нафлудил... Данная команда поможет убрать данный флуд за секунды!',
+	                value='Можно убирать чей то флуд за секунды!',
 	                inline=False)
 	embed.add_field(name='i!пинг', value='Просто пинг.', inline=True)
 	embed.set_footer(text='Данный хелп еще в разработке, так что а)', icon_url=ctx.author.avatar_url)
