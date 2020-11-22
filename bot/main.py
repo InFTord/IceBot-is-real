@@ -46,15 +46,16 @@ async def on_ready():
 @client.event
 async def on_command_error(ctx, error):
 	if isinstance(error, commands.UserInputError):
-		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
+		embed = discord.Embed(title='Неправильные аргументы | Ошибка', color=discord.Color.red(),
+		                      timestamp=ctx.message.created_at)
 		embed.set_author(name='Неправильные аргументы | Ошибка')
 		embed.add_field(name='Используйте следующие аргументы для данной команды:', value=f'```{ctx.command.usage}```')
 		embed.set_footer(text='Я думаю вам надо читать хелп', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
 	
 	if isinstance(error, commands.CommandInvokeError):
-		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
-		embed.set_author(name='Команда не работает | Ошибка')
+		embed = discord.Embed(title='Команда не работает | Ошибка', color=discord.Color.red(),
+		                      timestamp=ctx.message.created_at)
 		embed.add_field(name='Данная команда в данный момент не работает!',
 		                value='Сообщите разработчику бота о данной ошибке!')
 		embed.set_footer(text='Пока что юзайте другие команды бота :3', icon_url=ctx.author.avatar_url)
@@ -64,16 +65,16 @@ async def on_command_error(ctx, error):
 		await ctx.message.add_reaction('❌')
 	if isinstance(error, commands.MissingPermissions):
 		member = ctx.author
-		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
-		embed.set_author(name='Недостаточно прав | Ошибка')
+		embed = discord.Embed(title='Недостаточно прав | Ошибка', color=discord.Color.red(),
+		                      timestamp=ctx.message.created_at)
 		embed.add_field(name='У вас недостаточно прав для использования этой команды!',
 		                value='Вы думаете я допущу взлом сервера? А вот и нет.')
 		embed.set_footer(text='Получите необходимые права для данной команды :3', icon_url=ctx.author.avatar_url)
 		await member.send(embed=embed)
 	
 	if isinstance(error, commands.BotMissingPermissions):
-		embed = discord.Embed(color=discord.Color.red(), timestamp=ctx.message.created_at)
-		embed.set_author(name='Недостаточно прав бота | Ошибка')
+		embed = discord.Embed(title='Неправильные аргументы | Ошибка', color=discord.Color.red(),
+		                      timestamp=ctx.message.created_at)
 		embed.add_field(name='У бота недостаточно прав для выполнения данной команды!',
 		                value='Выдайте необходимые права для бота')
 		embed.set_footer(text='Как мне работать без необходимых прав? :(', icon_url=ctx.author.avatar_url)
