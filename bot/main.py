@@ -48,7 +48,6 @@ async def on_command_error(ctx, error):
 	if isinstance(error, commands.UserInputError):
 		embed = discord.Embed(title='Неправильные аргументы | Ошибка', color=discord.Color.red(),
 		                      timestamp=ctx.message.created_at)
-		embed.set_author(name='Неправильные аргументы | Ошибка')
 		embed.add_field(name='Используйте следующие аргументы для данной команды:', value=f'```{ctx.command.usage}```')
 		embed.set_footer(text='Я думаю вам надо читать хелп', icon_url=ctx.author.avatar_url)
 		await ctx.send(embed=embed)
@@ -154,5 +153,12 @@ async def help(ctx):
 
 
 # Логин бота
+
+if __name__ == '__main__':
+	# When running this file, if it is the 'main' file
+	# I.E its not being imported from another python file run this
+	for file in os.listdir("./cogs"):
+		if file.endswith(".py") and not file.startswith("_"):
+			client.load_extension(f"cogs.{file[:-3]}")
 
 client.run(bot_token)
